@@ -11,5 +11,7 @@ public:
     vbo_.setUsage(sf::VertexBuffer::Static);
   }
 
+  ~Level() {
 
+  }
 };

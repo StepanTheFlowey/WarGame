@@ -1,13 +1,18 @@
-#include <rapidjson/document.h>
-#include <rapidjson/error/en.h>
-#include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
-#include <Windows.h>
+#define WIN32_LEAN_AND_MEAN
+#include <cmath>
 #include <iostream>
 #include <fstream>
-#include <cmath>
+#include <Windows.h>
+
+#include <rapidjson/document.h>
+#include <rapidjson/error/en.h>
+
+#include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
 #include "types.hpp"
+#include "resources.hpp"
+#include "level.hpp"
 
 bool playerDied = false;
 bool playerWin = false;
@@ -15,7 +20,7 @@ bool playerWin = false;
 uint16_t ScrW = sf::VideoMode::getDesktopMode().width;
 uint16_t ScrH = sf::VideoMode::getDesktopMode().height;
 
-sf::Font *fsys;
+sf::Font* fsys;
 
 enum Diffucult {
   Easy,
@@ -38,7 +43,7 @@ struct TextureSet {
   sf::Texture right[2];
   sf::Texture death[15];
 };
-TextureSet *txset;
+TextureSet* txset;
 
 struct Chunk {
   sf::RectangleShape rect[8][8];
@@ -115,7 +120,7 @@ public:
     }
   }
 
-  virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const {
+  virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const {
     if(work) {
       target.draw(circle);
     }
@@ -155,7 +160,7 @@ public:
 #ifdef DEBUG
     debug(L"Player init done");
 #endif // DEBUG
-}
+  }
 
   bool checkWall() {
     bool cango = false;
@@ -207,7 +212,7 @@ public:
           if(checkWall()) {
             spr.move(0, offset);
           }
-          spr.setTexture(txset->up[(int) frame]);
+          spr.setTexture(txset->up[(int)frame]);
           break;
         }
         case Direction::Right:
@@ -219,7 +224,7 @@ public:
           if(checkWall()) {
             spr.move(-offset, 0);
           }
-          spr.setTexture(txset->right[(int) frame]);
+          spr.setTexture(txset->right[(int)frame]);
           break;
         }
         case Direction::Down:
@@ -231,7 +236,7 @@ public:
           if(checkWall()) {
             spr.move(0, -offset);
           }
-          spr.setTexture(txset->down[(int) frame]);
+          spr.setTexture(txset->down[(int)frame]);
           break;
         }
         case Direction::Left:
@@ -243,7 +248,7 @@ public:
           if(checkWall()) {
             spr.move(offset, 0);
           }
-          spr.setTexture(txset->left[(int) frame]);
+          spr.setTexture(txset->left[(int)frame]);
           break;
         }
       }
@@ -347,24 +352,24 @@ public:
     }
     //Death animation
     if(playerDied) {
-      spr.setTexture(txset->death[(int32_t) dieAnim]);   //Set sprite
+      spr.setTexture(txset->death[(int32_t)dieAnim]);   //Set sprite
       if(dieAnim < 14) {                             //Sprite counter security
         dieAnim += 0.1;                              //Sprite counter
       }
     }
-    for(auto &i : bullet) {
+    for(auto& i : bullet) {
       i.update();
     }
   }
 
-  virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const {
+  virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const {
     target.draw(spr);     //Drawing player sprite
-    for(auto &i : bullet) { //Bullet counter
+    for(auto& i : bullet) { //Bullet counter
       target.draw(i);     //Bullet draw
     }
   }
 
-  void drawUI(sf::RenderWindow &window) {
+  void drawUI(sf::RenderWindow& window) {
     window.draw(healthrect);
     window.draw(healthbar);
   }
@@ -394,7 +399,7 @@ public:
     debug(L"Enemy init");
 #endif // DEBUG
     bullet.resize(32);
-    for(auto &i : bullet) {
+    for(auto& i : bullet) {
       i.setType(Bullet::Type::Normal);
     }
     spr.setTexture(txset->down[0]);
@@ -421,7 +426,7 @@ public:
     }
     debug(L"Enemy init done");
 #endif // DEBUG
-}
+  }
 
   bool checkWall() {
     bool cango = false;
@@ -477,7 +482,7 @@ public:
           frame = 0;
         }
         spr.move(0, -offset);
-        spr.setTexture(txset->up[(int) frame]);
+        spr.setTexture(txset->up[(int)frame]);
         break;
       }
       case Direction::Right:
@@ -486,7 +491,7 @@ public:
           frame = 0;
         }
         spr.move(offset, 0);
-        spr.setTexture(txset->right[(int) frame]);
+        spr.setTexture(txset->right[(int)frame]);
         break;
       }
       case Direction::Down:
@@ -495,7 +500,7 @@ public:
           frame = 0;
         }
         spr.move(0, offset);
-        spr.setTexture(txset->down[(int) frame]);
+        spr.setTexture(txset->down[(int)frame]);
         break;
       }
       case Direction::Left:
@@ -504,7 +509,7 @@ public:
           frame = 0;
         }
         spr.move(-offset, 0);
-        spr.setTexture(txset->left[(int) frame]);
+        spr.setTexture(txset->left[(int)frame]);
         break;
       }
     }
@@ -623,7 +628,7 @@ public:
           }
         }
       }
-  }
+    }
     for(uint8_t i = 0; i < bullet.size(); i++) {
       if(bullet[i].circle.getGlobalBounds().intersects(pl.spr.getGlobalBounds())) {
         pl.damage(1);
@@ -640,26 +645,26 @@ public:
     healthrect.setPosition(x, y);
     healthbar.setPosition(x, y);
     if(died) {
-      spr.setTexture(txset->death[(int) dieAnim]);   //Set sprite
+      spr.setTexture(txset->death[(int)dieAnim]);   //Set sprite
       if(dieAnim < 14) {                             //Sprite counter security
         dieAnim += 0.1;                              //Sprite counter
       }
     }
-    for(auto &i : bullet) {
+    for(auto& i : bullet) {
       i.update();
     }
   }
 
-  virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const {
+  virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const {
     target.draw(spr);
-    for(auto &i : bullet) {
+    for(auto& i : bullet) {
       target.draw(i);
     }
     if(!died) {
 #ifdef DEBUG
       for(uint8_t i = 0; i < 4; i++) {
         target.draw(debugRect[i]);
-  }
+      }
 #endif // DEBUG
       target.draw(healthrect);
       target.draw(healthbar);
@@ -698,7 +703,7 @@ public:
 #ifdef DEBUG
     debug(L"Map init done");
 #endif // DEBUG
-    }
+  }
   void loadMap(MapContainer map) {
     //Load map from array to tiles
     for(uint8_t i = 0; i < 64; i++) {
@@ -755,12 +760,12 @@ public:
         }
       }
     }
-    for(auto &i : enemy) {
+    for(auto& i : enemy) {
       i.update();
     }
   }
 
-  void draw(sf::RenderWindow &window, sf::Vector2f viewcenter) {
+  void draw(sf::RenderWindow& window, sf::Vector2f viewcenter) {
     //Draw visible chunks
     for(uint8_t i = 0; i < 8; i++) {
       for(uint8_t j = 0; j < 8; j++) {
@@ -774,7 +779,7 @@ public:
       }
     }
     //Draw enemy
-    for(auto &i : enemy) {
+    for(auto& i : enemy) {
       window.draw(i);
     }
   }
@@ -814,10 +819,8 @@ void loadScreen() {
   }
   window.close();
 }
-//Load window parallel thread
-sf::Thread thread(&loadScreen);
 
-void selectmap(sf::RenderWindow &window) {
+void selectmap(sf::RenderWindow& window) {
 #ifdef DEBUG
   debug(L"Map file find started");
 #endif // DEBUG
@@ -834,15 +837,15 @@ void selectmap(sf::RenderWindow &window) {
     while(FindNextFileW(hFind, &ffd) != 0) {
       if(!(ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
 #ifdef DEBUG
-        debug(L"Found file in \'maps\' dir: " + (std::wstring) ffd.cFileName);
+        debug(L"Found file in \'maps\' dir: " + (std::wstring)ffd.cFileName);
 #endif // DEBUG
         filelist.push_back(ffd.cFileName);
-    }
+      }
       else {
 #ifdef DEBUG
-        debug(L"Skipped found: " + (std::wstring) ffd.cFileName);
+        debug(L"Skipped found: " + (std::wstring)ffd.cFileName);
 #endif // DEBUG
-  }
+      }
     }
     FindClose(hFind);
   }
@@ -911,7 +914,7 @@ void selectmap(sf::RenderWindow &window) {
         break;
       }
       //debug("Preparing map container");
-      maplist.push_back(d["name"].GetString() + (std::string) " [MAP]");
+      maplist.push_back(d["name"].GetString() + (std::string)" [MAP]");
       maps.push_back(std::vector<MapContainer>(1));
       for(rapidjson::SizeType i = 0; i < d["map"].Size(); i++) {
         for(rapidjson::SizeType j = 0; j < d["map"][i].Size(); j++) {
@@ -932,7 +935,7 @@ void selectmap(sf::RenderWindow &window) {
   for(uint16_t i = 0; i < gradient.size(); i++) {
     gradient[i].setSize(sf::Vector2f(ScrW, 1));
     gradient[i].setPosition(sf::Vector2f(0, i));
-    gradient[i].setFillColor(sf::Color((float) i / gradient.size() * 100, 0, (float) i / gradient.size() * 100));
+    gradient[i].setFillColor(sf::Color((float)i / gradient.size() * 100, 0, (float)i / gradient.size() * 100));
   }
   //Rect
   sf::RectangleShape rect;
@@ -958,7 +961,7 @@ void selectmap(sf::RenderWindow &window) {
     rad = deg * 3.141592653589793238463 / 180;
     //Calculate gradient
     for(int i = 0; i < gradient.size(); i++) {
-      gradient[i].setFillColor(sf::Color((float) i / gradient.size() * abs(sin(rad) * 80), 0, (float) i / gradient.size() * abs(sin(rad) * 80)));
+      gradient[i].setFillColor(sf::Color((float)i / gradient.size() * abs(sin(rad) * 80), 0, (float)i / gradient.size() * abs(sin(rad) * 80)));
     }
     //Adding degree
     deg += 0.2;
@@ -1010,9 +1013,12 @@ int main() {
   SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &cfi);
 #endif // DEBUG
 
-  //Starting load window
+  //Load window parallel thread
+  sf::Thread thread(&loadScreen);
   thread.launch();
+
   //Create and init texture set
+
 #ifdef DEBUG
   debug(L"Loading tileset");
 #endif // DEBUG
@@ -1055,9 +1061,6 @@ int main() {
   load = false;
   thread.wait();
 
-#ifdef DEBUG
-  debug(L"Running map selector");
-#endif // DEBUG
   selectmap(window);
 
   //Init map
@@ -1179,4 +1182,4 @@ int main() {
 #ifdef DEBUG
   debug(L"Main loop exited");
 #endif // DEBUG
-  }
+}

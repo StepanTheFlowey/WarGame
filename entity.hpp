@@ -4,7 +4,15 @@
 
 class Entity : public sf::Drawable {
 public:
-  virtual void update() = NULL;
+  Entity() {
 
-  virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const = NULL;
+  }
+
+  ~Entity() {
+
+  }
+
+  virtual void update();
+
+  virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 };

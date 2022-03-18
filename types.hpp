@@ -1,5 +1,6 @@
 #pragma once
 #include <inttypes.h>
+#include <string>
 #include "timer.hpp"
 
 using gametime_t = uint32_t;
