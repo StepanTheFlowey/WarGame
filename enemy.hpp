@@ -1,9 +1,16 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-#include "types.hpp"
-#include "entity.hpp"
+#include "Entity.hpp"
 
 class Enemy : public Entity {
+public:
 
+  Enemy() {
+
+  }
+
+  ~Enemy() {
+
+  }
 };

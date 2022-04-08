@@ -1,12 +1,11 @@
 #pragma once
-#include <SFML\Graphics.hpp>
 
-#include "types.hpp"
-#include "entity.hpp"
+#include <SFML\Graphics.hpp>
+#include "Entity.hpp"
 
 class Player : public Entity {
-
 public:
+
   Player() {
 
   }

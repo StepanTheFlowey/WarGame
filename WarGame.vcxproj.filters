@@ -18,31 +18,73 @@
     <ClCompile Include="main.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
+    <ClCompile Include="LevelStorage.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Assets.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Level.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Context.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Exeption.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="types.hpp">
+    <ClInclude Include="main.hpp">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="entity.hpp">
+    <ClInclude Include="Entity.hpp">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="level.hpp">
+    <ClInclude Include="Level.hpp">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="levelstorage.hpp">
+    <ClInclude Include="LevelStorage.hpp">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="tile.hpp">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="player.hpp">
+    <ClInclude Include="Player.hpp">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="enemy.hpp">
+    <ClInclude Include="Enemy.hpp">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="resources.hpp">
+    <ClInclude Include="Assets.hpp">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="Context.hpp">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Exeption.hpp">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="WarGame.rc">
+      <Filter>Resources</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\tileset.png">
+      <Filter>Resources</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="assets\SUS.ttf">
+      <Filter>Resources</Filter>
+    </Font>
   </ItemGroup>
 </Project>

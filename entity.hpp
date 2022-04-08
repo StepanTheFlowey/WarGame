@@ -1,16 +1,15 @@
 #pragma once
+
 #include <SFML/Graphics.hpp>
-#include "types.hpp"
+#include "main.hpp"
 
 class Entity : public sf::Drawable {
+  sf::Sprite sprite_;
 public:
-  Entity() {
 
-  }
+  Entity();
 
-  ~Entity() {
-
-  }
+  virtual ~Entity();
 
   virtual void update();
 

@@ -85,6 +85,8 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <TargetMachine>MachineX86</TargetMachine>
@@ -98,6 +100,8 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <TargetMachine>MachineX86</TargetMachine>
@@ -132,17 +136,35 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Assets.cpp" />
+    <ClCompile Include="Context.cpp" />
+    <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="Exeption.cpp" />
+    <ClCompile Include="Level.cpp" />
+    <ClCompile Include="LevelStorage.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="enemy.hpp" />
-    <ClInclude Include="entity.hpp" />
-    <ClInclude Include="level.hpp" />
-    <ClInclude Include="levelstorage.hpp" />
-    <ClInclude Include="player.hpp" />
-    <ClInclude Include="resources.hpp" />
+    <ClInclude Include="Context.hpp" />
+    <ClInclude Include="Enemy.hpp" />
+    <ClInclude Include="Entity.hpp" />
+    <ClInclude Include="Exeption.hpp" />
+    <ClInclude Include="Level.hpp" />
+    <ClInclude Include="LevelStorage.hpp" />
+    <ClInclude Include="Player.hpp" />
+    <ClInclude Include="Assets.hpp" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="tile.hpp" />
-    <ClInclude Include="types.hpp" />
+    <ClInclude Include="main.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="WarGame.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\tileset.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="assets\SUS.ttf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
