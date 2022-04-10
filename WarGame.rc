@@ -60,7 +60,7 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 // PNG
 //
 
-IDB_IMG1                IMG                     "assets\\tileset.png"
+ID_IMG1                IMG                     "assets\\tileset.png"
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -68,7 +68,7 @@ IDB_IMG1                IMG                     "assets\\tileset.png"
 // FON
 //
 
-IDR_FON1                FON                     "assets\\SUS.ttf"
+ID_FON1                FON                     "assets\\SUS.ttf"
 
 #endif    // Английский (США) resources
 /////////////////////////////////////////////////////////////////////////////

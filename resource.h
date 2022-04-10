@@ -2,8 +2,8 @@
 // Включаемый файл, созданный в Microsoft Visual C++.
 // Используется WarGame.rc
 //
-#define IDB_ING1                        101
-#define IDR_FON1                        102
+#define ID_IMG1                        101
+#define ID_FON1                        102
 
 // Next default values for new objects
 // 

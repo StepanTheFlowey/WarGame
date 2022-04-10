@@ -12,12 +12,16 @@ Context* context = nullptr;
 Context::Context() : window(), event() {
   debug(L"Context()");
   contextSettings_.antialiasingLevel = 0;
-  contextSettings_.depthBits = 16;
+  contextSettings_.depthBits = 0;
   contextSettings_.majorVersion = 2;
   contextSettings_.minorVersion = 1;
 
-  videoMode = sf::VideoMode::getDesktopMode();
-  videoMode.height--;
+  videoMode = sf::VideoMode(800, 600);
+}
+
+Context::~Context() {
+  debug(L"~Context()");
+  destroy();
 }
 
 void Context::load() {
@@ -29,11 +33,28 @@ void Context::save() const {
 }
 
 void Context::create() {
-  window.create(videoMode, L"Strange", sf::Style::None, contextSettings_);
+  if(fullscreen_) window.create(videoMode, L"WarGame", sf::Style::Fullscreen, contextSettings_);
+  else            window.create(videoMode, L"WarGame", sf::Style::Default, contextSettings_);
   window.setVerticalSyncEnabled(true);
+}
 
-  MARGINS margins = {-1};
-  DwmExtendFrameIntoClientArea(window.getSystemHandle(), &margins);
+void Context::destroy() {
+  window.close();
+}
+
+inline void Context::autoEvent() {
+  if(window.pollEvent(event)) {
+    if(sf::Event::Closed == event.type) {
+      destroy();
+    }
+    else if(sf::Event::KeyPressed == event.type) {
+      if(sf::Keyboard::F11 == event.key.code) {
+        fullscreen_ = !fullscreen_;
+        if(fullscreen_) videoMode = sf::VideoMode::getDesktopMode();
+        else            videoMode = sf::VideoMode(800, 600);
+      }
+    }
+  }
 }
 
 bool Context::pollEvent() {
@@ -41,7 +62,18 @@ bool Context::pollEvent() {
     if(sf::Event::Closed == event.type) {
       window.close();
     }
-    return true;
+    else if(sf::Event::KeyPressed == event.type) {
+      if(sf::Keyboard::F11 == event.key.code) {
+        fullscreen_ = !fullscreen_;
+        if(fullscreen_) videoMode = sf::VideoMode::getDesktopMode();
+        else            videoMode = sf::VideoMode(800, 600);
+        create();
+      }
+      return true;
+    }
+    else {
+      return true;
+    }
   }
   return false;
 }

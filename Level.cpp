@@ -22,12 +22,28 @@ void Level::load(const LevelStorage& storage) {
         sf::Vector2f(i * 64 + 64, j * 64), sf::Color(rand(), rand(), rand()));
     }
   }
+  vbo_.create(vt.size());
+  vbo_.update(vt.data());
+
+  for(uint8_t i = 0; i < 64; ++i) {
+    entities_.push_back(new Enemy(sf::Vector2f((rand() % size.x) * 64, (rand() % size.y) * 64)));
+  }
 }
 
 void Level::save(LevelStorage& storage) const {
 
 }
 
+void Level::update(sf::Time time) {
+  for(auto& i : entities_) {
+    i->update(time);
+  }
+}
+
 void Level::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   target.draw(vbo_);
+
+  for(const auto& i : entities_) {
+    target.draw(*i);
+  }
 }

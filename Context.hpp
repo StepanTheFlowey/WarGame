@@ -14,6 +14,7 @@ class Context {
   std::map<uint16_t, sf::Music> music_;
   sf::ContextSettings contextSettings_;
   sf::Context context_;
+  bool fullscreen_ = false;
 public:
 
   sf::RenderWindow window;
@@ -25,10 +26,7 @@ public:
 
   Context();
 
-  ~Context() {
-    debug(L"~Context()");
-    destroy();
-  }
+  ~Context();
 
   void load();
 
@@ -36,23 +34,15 @@ public:
 
   void create();
 
-  void destroy() {
-    window.close();
-  }
+  void destroy();
 
-  bool alive() const {
+  inline bool alive() const {
     return window.isOpen();
   }
 
-  void autoEvent() {
-    if(window.pollEvent(event)) {
-      if(sf::Event::Closed == event.type) {
-        window.close();
-      }
-    }
-  }
+  void autoEvent();
 
-  void autoClock() {
+  inline void autoClock() {
     time = clock.restart();
   }
 

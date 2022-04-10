@@ -24,9 +24,6 @@
     <ClCompile Include="Entity.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Assets.cpp">
-      <Filter>Sources</Filter>
-    </ClCompile>
     <ClCompile Include="Level.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
@@ -34,6 +31,21 @@
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="Exeption.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Magazine.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Gui.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -59,9 +71,6 @@
     <ClInclude Include="Enemy.hpp">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Assets.hpp">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="Context.hpp">
       <Filter>Headers</Filter>
     </ClInclude>
@@ -69,6 +78,18 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Magazine.hpp">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.hpp">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Direction.hpp">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Gui.hpp">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>

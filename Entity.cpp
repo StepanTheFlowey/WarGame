@@ -8,12 +8,21 @@ Entity::~Entity() {
   debug(L"~Entity()");
 }
 
-void Entity::update() {
-  debug(L"Entity::update()");
-  throw;
+const sf::FloatRect Entity::getRect() {
+  return sf::FloatRect();
+}
+
+void Entity::damage(const int16_t amount) {
+  health_ -= amount;
+  if(health_ < 0) {
+    expired_ = true;
+  }
+}
+
+void Entity::update(sf::Time time) {
+
 }
 
 void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-  debug(L"Entity::draw()");
-  throw;
+  target.draw(sprite_);
 }

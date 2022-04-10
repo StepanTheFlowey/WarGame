@@ -1,6 +1,6 @@
 #pragma once
 
-#include "types.hpp"
+#include "main.hpp"
 #include <SFML/System/Vector2.hpp>
 
 struct Tile {

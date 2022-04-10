@@ -17,11 +17,11 @@ public:
     debug(L"~LevelStorage()");
   }
 
-#ifdef DEBUG
   void loadTest();
-#endif // DEBUG
 
   void load(const std::wstring filename);
+
+  void loadTiles();
 
   void save(const std::wstring filename);
 
