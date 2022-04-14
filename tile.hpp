@@ -7,7 +7,8 @@ struct Tile {
   enum class Type : uint8_t {
     None,
     Floor,
-    Wall
+    Wall,
+    Enemy
   };
   Type type;
 };

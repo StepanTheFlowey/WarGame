@@ -12,6 +12,16 @@ Enemy::Enemy(const sf::Vector2f position) {
   sprite_.setOrigin(sf::Vector2f(8.0F, 8.0F));
   sprite_.setPosition(position);
   sprite_.setColor(sf::Color::Red);
+  
+  healthBar.rect.setFillColor(sf::Color::Black);
+  healthBar.rect.setSize(sf::Vector2f(54, 14));
+  healthBar.rect.setOrigin(sf::Vector2f(27, 7));
+  healthBar.rect.setPosition(position - sf::Vector2f(0, 40));
+
+  healthBar.health.setFillColor(sf::Color::Red);
+  healthBar.health.setSize(sf::Vector2f(50, 10));
+  healthBar.health.setOrigin(sf::Vector2f(25, 5));
+  healthBar.health.setPosition(position - sf::Vector2f(0, 40));
 }
 
 Enemy::~Enemy() {
@@ -131,6 +141,11 @@ void Enemy::update(sf::Time time) {
   if(level->collide(sprite_.getGlobalBounds())) {
     sprite_.move(-m);
     walking_ = false;
+  }
+  else {
+    const sf::Vector2f pos = sprite_.getPosition()- sf::Vector2f(0, 40);
+    healthBar.health.setPosition(pos);
+    healthBar.rect.setPosition(pos);
   }
 }
 

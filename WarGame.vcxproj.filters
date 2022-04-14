@@ -18,7 +18,7 @@
     <ClCompile Include="main.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="LevelStorage.cpp">
+    <ClCompile Include="LevelInfo.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="Entity.cpp">
@@ -48,6 +48,12 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.hpp">
@@ -59,10 +65,10 @@
     <ClInclude Include="Level.hpp">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="LevelStorage.hpp">
+    <ClInclude Include="LevelInfo.hpp">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="tile.hpp">
+    <ClInclude Include="Tile.hpp">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="Player.hpp">
@@ -90,6 +96,12 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="Gui.hpp">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.hpp">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.hpp">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>

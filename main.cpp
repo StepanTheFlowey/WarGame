@@ -4,9 +4,31 @@
 #include "Context.hpp"
 #include "Player.hpp"
 #include "Gui.hpp"
+#include "Menu.hpp"
+#include "Game.hpp"
 
-int selectLevel() {
-  return 0;
+int submain() {
+  context = new Context;
+  level = new Level;
+  gui = new Gui;
+  magazine = new Magazine;
+  player = new Player;
+
+  context->create();
+
+  Menu menu;
+back:
+  switch(menu.run()) {
+    case 0:
+      break;
+    case 1:
+    {
+      Game().run();
+      goto back;
+    }
+  }
+
+  return EXIT_SUCCESS;
 }
 
 #ifdef DEBUG
@@ -15,90 +37,15 @@ int main() {
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd) {
 #endif // DEBUG
 
-  context = new Context;
-  level = new Level;
-  gui = new Gui;
-  magazine = new Magazine;
-  player = new Player;
-
-  LevelStorage storage;
-  storage.loadTest();
-  level->load(storage);
-
-  sf::RenderWindow& window = context->window;
-  sf::Event& event = context->event;
-  sf::Time& time = context->time;
-  sf::View view;
-
-  context->create();
-  view.setSize(sf::Vector2f(context->videoMode.width, context->videoMode.height));
-  while(context->alive()) {
-    context->autoClock();
-
-    magazine->update(time);
-    level->update(time);
-    player->update(time);
-
-    view.setCenter(player->getPosition());
-
-    window.setView(view);
-    window.clear(sf::Color::Magenta);
-    window.draw(*level);
-    window.draw(*player);
-    window.draw(*magazine);
-    window.setView(window.getDefaultView());
-    window.draw(*gui);
-    window.display();
-
-    while(context->pollEvent()) {
-      switch(event.type) {
-        case sf::Event::KeyPressed:
-          switch(event.key.code) {
-            case sf::Keyboard::Up:
-            case sf::Keyboard::W:
-              player->setWalk(Direction::Forward, true);
-              break;
-            case sf::Keyboard::Down:
-            case sf::Keyboard::S:
-              player->setWalk(Direction::Back, true);
-              break;
-            case sf::Keyboard::Left:
-            case sf::Keyboard::A:
-              player->setWalk(Direction::Left, true);
-              break;
-            case sf::Keyboard::Right:
-            case sf::Keyboard::D:
-              player->setWalk(Direction::Right, true);
-              break;
-            case sf::Keyboard::F11:
-              view.setSize(sf::Vector2f(context->videoMode.width, context->videoMode.height));
-              break;
-            case sf::Keyboard::E:
-              player->fire();
-              break;
-          }
-          break;
-        case sf::Event::KeyReleased:
-          switch(event.key.code) {
-            case sf::Keyboard::Up:
-            case sf::Keyboard::W:
-              player->setWalk(Direction::Forward, false);
-              break;
-            case sf::Keyboard::Down:
-            case sf::Keyboard::S:
-              player->setWalk(Direction::Back, false);
-              break;
-            case sf::Keyboard::Left:
-            case sf::Keyboard::A:
-              player->setWalk(Direction::Left, false);
-              break;
-            case sf::Keyboard::Right:
-            case sf::Keyboard::D:
-              player->setWalk(Direction::Right, false);
-              break;
-          }
-          break;
-      }
-    }
+  try {
+    return submain();
   }
+  catch(const Exeption& exeption) {
+#ifdef DEBUG
+    std::wcerr << L"Shit happened!" << std::endl << exeption.wtf();
+#else
+    MessageBoxW(NULL, exeption.wtf().c_str(), L"Shit happened!", MB_ICONERROR | MB_OK);
+#endif // DEBUG
+  }
+  return EXIT_FAILURE;
 }

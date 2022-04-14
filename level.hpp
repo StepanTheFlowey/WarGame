@@ -2,13 +2,16 @@
 
 #include <vector>
 #include <SFML/Graphics.hpp>
-#include "LevelStorage.hpp"
+#include "LevelInfo.hpp"
 #include "Magazine.hpp"
 #include "Enemy.hpp"
+#include "Tile.hpp"
 
 class Level : public sf::Drawable {
   sf::VertexBuffer vbo_;
   std::vector<Entity*> entities_;
+  std::vector<Tile*> tiles_;
+  LevelInfo info_;
 public:
 
   Level() {
@@ -21,13 +24,11 @@ public:
     debug(L"Level()");
   }
 
-  void load(const LevelStorage& storage);
+  void load(LevelInfo& storage);
 
-  void save(LevelStorage& storage) const;
+  void save() const;
 
-  inline bool collide(const sf::FloatRect rect) {
-    return !sf::FloatRect(0, 0, 2048, 2048).intersects(rect);
-  }
+  bool collide(const sf::FloatRect rect);
 
   void update(sf::Time time);
 

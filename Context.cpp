@@ -33,47 +33,70 @@ void Context::save() const {
 }
 
 void Context::create() {
-  if(fullscreen_) window.create(videoMode, L"WarGame", sf::Style::Fullscreen, contextSettings_);
-  else            window.create(videoMode, L"WarGame", sf::Style::Default, contextSettings_);
+  if(fullscreen_) {
+    window.create(videoMode, L"WarGame", sf::Style::Fullscreen, contextSettings_);
+  }
+  else {
+    window.create(videoMode, L"WarGame", sf::Style::Default, contextSettings_);
+  }
   window.setVerticalSyncEnabled(true);
 }
 
 void Context::destroy() {
   window.close();
+  exit(EXIT_SUCCESS);
 }
 
-inline void Context::autoEvent() {
+void Context::autoEvent() {
   if(window.pollEvent(event)) {
-    if(sf::Event::Closed == event.type) {
-      destroy();
-    }
-    else if(sf::Event::KeyPressed == event.type) {
-      if(sf::Keyboard::F11 == event.key.code) {
-        fullscreen_ = !fullscreen_;
-        if(fullscreen_) videoMode = sf::VideoMode::getDesktopMode();
-        else            videoMode = sf::VideoMode(800, 600);
-      }
+    switch(event.type) {
+      case sf::Event::Closed:
+        window.close();
+        break;
+      case sf::Event::Resized:
+        videoMode.width = event.size.width;
+        videoMode.height = event.size.height;
+        break;
+      case sf::Event::KeyPressed:
+        if(sf::Keyboard::F11 == event.key.code) {
+          fullscreen_ = !fullscreen_;
+          if(fullscreen_) {
+            videoMode = sf::VideoMode::getDesktopMode();
+          }
+          else {
+            videoMode = sf::VideoMode(800, 600);
+          }
+          create();
+        }
+        break;
     }
   }
 }
 
 bool Context::pollEvent() {
   if(window.pollEvent(event)) {
-    if(sf::Event::Closed == event.type) {
-      window.close();
+    switch(event.type) {
+      case sf::Event::Closed:
+        window.close();
+        break;
+      case sf::Event::Resized:
+        videoMode.width = event.size.width;
+        videoMode.height = event.size.height;
+        break;
+      case sf::Event::KeyPressed:
+        if(sf::Keyboard::F11 == event.key.code) {
+          fullscreen_ = !fullscreen_;
+          if(fullscreen_) {
+            videoMode = sf::VideoMode::getDesktopMode();
+          }
+          else {
+            videoMode = sf::VideoMode(800, 600);
+          }
+          create();
+        }
+        break;
     }
-    else if(sf::Event::KeyPressed == event.type) {
-      if(sf::Keyboard::F11 == event.key.code) {
-        fullscreen_ = !fullscreen_;
-        if(fullscreen_) videoMode = sf::VideoMode::getDesktopMode();
-        else            videoMode = sf::VideoMode(800, 600);
-        create();
-      }
-      return true;
-    }
-    else {
-      return true;
-    }
+    return true;
   }
   return false;
 }
