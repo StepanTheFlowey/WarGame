@@ -1,5 +1,4 @@
 #pragma once
-#define RAPIDJSON_USE_STD_STRING true
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX
 

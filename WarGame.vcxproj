@@ -183,6 +183,11 @@
   <ItemGroup>
     <Font Include="assets\SUS.ttf" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WarEditor\WarEditor.vcxproj">
+      <Project>{afe5766e-a904-46f2-91e7-0e503e871b26}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

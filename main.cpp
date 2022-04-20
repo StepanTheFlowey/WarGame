@@ -10,7 +10,7 @@
 int submain() {
   context = new Context;
   level = new Level;
-  gui = new Gui;
+  gui = new Dialogue;
   magazine = new Magazine;
   player = new Player;
 

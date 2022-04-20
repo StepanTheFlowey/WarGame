@@ -1,6 +1,6 @@
 #pragma once
 
-#include "main.hpp"
+#include <inttypes.h>
 #include <SFML/System/Vector2.hpp>
 
 struct Tile {
@@ -12,4 +12,6 @@ struct Tile {
   };
   Type type;
 };
-using TilePos = sf::Vector2<uint16_t>;
+using TileInt = uint16_t;
+using TilePos = sf::Vector2<TileInt>;
+using TileIndex = uint32_t;

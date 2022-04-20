@@ -10,7 +10,7 @@
 class Level : public sf::Drawable {
   sf::VertexBuffer vbo_;
   std::vector<Entity*> entities_;
-  std::vector<Tile*> tiles_;
+  std::vector<Tile> tiles_;
   LevelInfo info_;
 public:
 

@@ -1,9 +1,9 @@
 #include "Gui.hpp"
 
-Gui* gui = nullptr;
+Dialogue* gui = nullptr;
 
-Gui::Gui() {
-  debug(L"Gui()");
+Dialogue::Dialogue() {
+  debug(L"Dialogue()");
   healthBar.rect.setPosition(sf::Vector2f(10, 10));
   healthBar.rect.setSize(sf::Vector2f(104, 24));
   healthBar.rect.setFillColor(sf::Color::Black);
@@ -12,11 +12,11 @@ Gui::Gui() {
   healthBar.health.setFillColor(sf::Color::Red);
 }
 
-Gui::~Gui() {
-  debug(L"~Gui()");
+Dialogue::~Dialogue() {
+  debug(L"~Dialogue()");
 }
 
-void Gui::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+void Dialogue::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   target.draw(healthBar.rect, states);
   target.draw(healthBar.health, states);
 }
