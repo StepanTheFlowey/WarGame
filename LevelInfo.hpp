@@ -4,13 +4,14 @@
 #include "main.hpp"
 
 class LevelInfo {
+  std::wstring filename_;
 public:
 
   std::wstring name;
   std::wstring author;
 
-  bool pack=false;
-  std::vector<std::wstring> names;
+  bool pack = false;
+  std::vector<std::wstring> levels;
 
   inline LevelInfo() {
     debug(L"LevelInfo()");
@@ -20,5 +21,5 @@ public:
     debug(L"~LevelInfo()");
   }
 
-  void load(const std::wstring filename);
+  bool load(const std::wstring filename);
 };

@@ -1,21 +1,32 @@
 #include "Menu.hpp"
 
+#include <utility>
 #include <filesystem>
-#include "Context.hpp"
 #include "Level.hpp"
 
 int Menu::run() {
-  sf::RenderWindow& window = context->window;
-  sf::Event& event = context->event;
-  sf::Time& time = context->time;
-
-  sf::Font& font = *context->getFont(ID_FON1);
+  gradient_[0] = sf::Vertex(
+    sf::Vector2f(0.F, 0.F),
+    sf::Color::Black
+  );
+  gradient_[1] = sf::Vertex(
+    sf::Vector2f(0.F, context->videoMode.height),
+    sf::Color::Black
+  );
+  gradient_[2] = sf::Vertex(
+    sf::Vector2f(context->videoMode.width, context->videoMode.height),
+    sf::Color::Black
+  );
+  gradient_[3] = sf::Vertex(
+    sf::Vector2f(context->videoMode.width, 0.F),
+    sf::Color::Black
+  );
 
   sf::Text texts[] = {
-    sf::Text("Continue",font,32),
-    sf::Text("New game",font,32),
-    sf::Text("Settings",font,32),
-    sf::Text("Exit",font,32)
+    sf::Text("Continue", font, 32),
+    sf::Text("New game", font, 32),
+    sf::Text("Settings", font, 32),
+    sf::Text("Exit", font, 32)
   };
   constexpr uint8_t textsCount = sizeof(texts) / sizeof(sf::Text);
 
@@ -25,40 +36,32 @@ int Menu::run() {
     texts[i].setPosition(sf::Vector2f(context->videoMode.width / 2, context->videoMode.height - 300 + i * 40));
   }
 
-  gradient[0] = sf::Vertex(
-    sf::Vector2f(0.F, 0.F),
-    sf::Color::Black
-  );
-  gradient[1] = sf::Vertex(
-    sf::Vector2f(0.F, context->videoMode.height),
-    sf::Color::Black
-  );
-  gradient[2] = sf::Vertex(
-    sf::Vector2f(context->videoMode.width, context->videoMode.height),
-    sf::Color::Black
-  );
-  gradient[3] = sf::Vertex(
-    sf::Vector2f(context->videoMode.width, 0.F),
-    sf::Color::Black
-  );
-
   uint8_t lastSelected = UINT8_MAX;
   while(context->alive()) {
-    time -= context->clock.restart();
+    context->autoClock();
 
-    if(time < sf::microseconds(0)) {
-      time += sf::milliseconds(50);
-
-      ++gradientDegree;
-      sf::Color color;
-      color.r = static_cast<uint8_t>(std::abs(std::sinf(gradientDegree * F_DEG_TO_RAD)) * 128.F);
-      color.g = color.r / 4;
-      gradient[1].color = color;
-      gradient[2].color = color;
+    if(gradientR_ < 0.5F) {
+      gradientR_ += time.asSeconds() / 10.F;
     }
+    else {
+      gradientR_ = 0.5F;
+    }
+    if(gradientG_ < 0.25F) {
+      gradientG_ += time.asSeconds() / 20.F;
+    }
+    else {
+      gradientG_ = 0.25F;
+    }
+    if(gradientB_ > 1.0F) {
+      gradientB_ -= time.asSeconds() / 5.F;
+    }
+    else {
+      gradientB_ = 0.0F;
+    }
+    updateGradient(time);
 
     window.clear();
-    window.draw(gradient, 4, sf::Quads);
+    window.draw(gradient_, 4, sf::Quads);
     for(uint8_t i = 0; i < textsCount; ++i) {
       window.draw(texts[i]);
     }
@@ -73,10 +76,10 @@ int Menu::run() {
             texts[i].setPosition(sf::Vector2f(context->videoMode.width / 2, context->videoMode.height - 300 + i * 40));
           }
 
-          gradient[0].position = sf::Vector2f(0.F, 0.F);
-          gradient[1].position = sf::Vector2f(0.F, context->videoMode.height);
-          gradient[2].position = sf::Vector2f(context->videoMode.width, context->videoMode.height);
-          gradient[3].position = sf::Vector2f(context->videoMode.width, 0.F);
+          gradient_[0].position = sf::Vector2f(0.F, 0.F);
+          gradient_[1].position = sf::Vector2f(0.F, context->videoMode.height);
+          gradient_[2].position = sf::Vector2f(context->videoMode.width, context->videoMode.height);
+          gradient_[3].position = sf::Vector2f(context->videoMode.width, 0.F);
           break;
         case sf::Event::MouseMoved:
         {
@@ -109,6 +112,24 @@ int Menu::run() {
   return 0;
 }
 
+void Menu::updateGradient(const sf::Time time) {
+  gradientTime_ -= time;
+  if(gradientTime_ < sf::microseconds(0)) {
+    gradientTime_ += sf::milliseconds(50);
+
+    ++gradientDegree_;
+    const float val = std::fabs(std::sinf(gradientDegree_ * F_DEG_TO_RAD)) * 255.F;
+
+    const sf::Color color(
+      static_cast<uint8_t>(val * gradientR_),
+      static_cast<uint8_t>(val * gradientG_),
+      static_cast<uint8_t>(val * gradientB_)
+    );
+    gradient_[1].color = color;
+    gradient_[2].color = color;
+  }
+}
+
 int Menu::broker(int button) {
   switch(button) {
     case 0:
@@ -133,8 +154,88 @@ int Menu::broker(int button) {
 int Menu::select() {
   namespace fs = std::filesystem;
 
-  std::vector<LevelInfo> levels_;
-  
+  std::vector<LevelInfo> levels;
+
+  if(!fs::exists("maps")) {
+    fs::create_directory("maps");
+  }
+
+  {
+    std::wstring filename;
+    for(auto& i : fs::directory_iterator("maps")) {
+      if(!fs::is_directory(i)) {
+        continue;
+      }
+      filename = i.path().wstring() + L"/level.dat";
+      if(!fs::is_regular_file(filename)) {
+        continue;
+      }
+      if(fs::is_empty(filename)) {
+        continue;
+      }
+
+      levels.emplace_back();
+      if(!levels.back().load(filename)) {
+        levels.pop_back();
+      }
+    }
+  }
+
+  std::vector<std::pair<sf::Text, sf::Text>> texts;
+
+  for(auto& i : levels) {
+    size_t pos = texts.size();
+    debug(pos);
+    debug(i.name);
+    debug(i.author);
+    texts.push_back(std::make_pair(sf::Text(i.name, font, 16), sf::Text(i.author, font, 16)));
+    auto& i = texts.back();
+    i.first.setPosition(sf::Vector2f());
+  }
+
+  while(window.isOpen()) {
+    context->autoClock();
+
+    if(gradientR_ > 0.F) {
+      gradientR_ -= time.asSeconds() / 20.F;
+    }
+    else {
+      gradientR_ = 0.F;
+    }
+    if(gradientG_ > 0.1F) {
+      gradientG_ -= time.asSeconds() / 40.F;
+    }
+    else {
+      gradientG_ = 0.1F;
+    }
+    if(gradientB_ < 0.8F) {
+      gradientB_ += time.asSeconds() / 5.F;
+    }
+    else {
+      gradientB_ = 0.8F;
+    }
+    updateGradient(time);
+
+    window.clear();
+    window.draw(gradient_, 4, sf::Quads);
+    for(auto& i : texts) {
+      window.draw(i.first);
+      window.draw(i.second);
+    }
+    window.display();
+
+    while(context->pollEvent()) {
+      switch(event.type) {
+        case sf::Event::MouseMoved:
+
+          break;
+        case sf::Event::MouseButtonPressed:
+
+          break;
+      }
+    }
+  }
+  return -1;
 }
 
 int Menu::settings() {
