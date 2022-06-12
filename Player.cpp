@@ -8,6 +8,7 @@ Player* player = nullptr;
 
 Player::Player() {
   debug(L"Player()");
+
   sprite_.setTexture(*context->getTexture(ID_IMG1));
   sprite_.setTextureRect(sf::IntRect(0, 0, 16, 16));
   sprite_.setScale(sf::Vector2f(4.0F, 4.0F));

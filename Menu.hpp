@@ -17,9 +17,7 @@ public:
 
   int run();
 
-private:
-
-  void updateGradient(const sf::Time time);
+protected:
 
   int broker(int button);
 
@@ -27,12 +25,31 @@ private:
 
   int settings();
 
-  sf::Time gradientTime_;
-  sf::Vertex gradient_[4];
-  uint16_t gradientDegree_ = 0;
-  float gradientR_ = 0.0F;
-  float gradientG_ = 0.0F;
-  float gradientB_ = 0.0F;
+  class Gradient : public sf::Drawable {
+  public:
+
+    Gradient();
+
+    ~Gradient() = default;
+
+    void setColor(const sf::Vector3f& color, const float speed);
+
+    void resize(const sf::Vector2f& size);
+
+    void update(const sf::Time time);
+
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+  protected:
+
+    sf::Vector3f current_;
+    sf::Vector3f target_;
+    sf::Vector3f prev_;
+    float speed_;
+
+    sf::Vertex vt_[4];
+    sf::Time time_;
+    uint16_t degree_ = 0;
+  } gradient_;
 
   sf::RenderWindow& window = context->window;
   sf::Event& event = context->event;

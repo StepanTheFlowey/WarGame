@@ -33,6 +33,8 @@ back:
 
 #ifdef DEBUG
 int main() {
+
+  SetConsoleTitleW(L"WarGame Debug");
 #else
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd) {
 #endif // DEBUG

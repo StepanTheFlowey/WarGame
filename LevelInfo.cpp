@@ -16,8 +16,8 @@ std::wstring readString(std::ifstream& file) {
 }
 
 bool LevelInfo::load(const std::wstring filename) {
-  std::ifstream file(shrink(L"assets/" + filename), std::ios::binary);
-
+  std::ifstream file(shrink(filename), std::ios::binary);
+  
   if(!file) {
     return false;
   }
