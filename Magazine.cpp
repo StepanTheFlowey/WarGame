@@ -1,5 +1,8 @@
 #include "Magazine.hpp"
 
+#include "Entity.hpp"
+#include "Level.hpp"
+
 Magazine* magazine = nullptr;
 
 Magazine::Magazine() {
@@ -24,6 +27,23 @@ void Magazine::update(sf::Time time) {
     Bullet*& bullet = bullets_[i];
     bullet->update(time);
     if(bullet->expired()) {
+      delete bullet;
+      bullets_.erase(bullets_.begin() + i);
+      --i;
+      continue;
+    }
+
+    if(level->collide(bullet->getRect())) {
+      delete bullet;
+      bullets_.erase(bullets_.begin() + i);
+      --i;
+      continue;
+    }
+
+    Entity* entity = level->collideEntity(bullet->getRect());
+    if(entity) {
+      entity->damage(1);
+
       delete bullet;
       bullets_.erase(bullets_.begin() + i);
       --i;

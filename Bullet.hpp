@@ -12,7 +12,11 @@ public:
 
   Bullet(const sf::Vector2f& begin, const float degree, const int32_t lifetime);
 
-  ~Bullet();
+  ~Bullet() = default;
+
+  inline const sf::FloatRect getRect() {
+    return sprite_.getGlobalBounds();
+  }
 
   inline bool expired() {
     return expired_;

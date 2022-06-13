@@ -5,14 +5,9 @@
 class Game {
 public:
 
-  inline Game() {
-    debug(L"Game()");
-  }
+  Game() = default;
 
-  inline ~Game() {
-    debug(L"~Game()");
-  }
+  ~Game() = default;
 
   void run();
 };
-

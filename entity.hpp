@@ -4,7 +4,6 @@
 #include "main.hpp"
 
 class Entity : public sf::Drawable {
-  int16_t health_ = 0;
 public:
 
   Entity();
@@ -30,6 +29,7 @@ public:
   virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 protected:
 
-  sf::Sprite sprite_;
   bool expired_ = false;
+  int16_t health_ = 0;
+  sf::Sprite sprite_;
 };

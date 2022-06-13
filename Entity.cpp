@@ -31,7 +31,8 @@ void Entity::move(const sf::Vector2f& position) {
 
 void Entity::damage(int16_t amount) {
   health_ -= amount;
-  if(health_ < 0) {
+  if(health_ <= 0) {
+    health_ = 0;
     expired_ = true;
   }
 }

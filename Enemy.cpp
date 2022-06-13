@@ -7,6 +7,8 @@
 Enemy::Enemy(const sf::Vector2f position) {
   debug(L"Enemy()");
 
+  health_ = 5;
+
   sprite_.setTexture(*context->getTexture(ID_IMG1));
   sprite_.setTextureRect(sf::IntRect(0, 0, 16, 16));
   sprite_.setScale(sf::Vector2f(4.0F, 4.0F));
@@ -77,6 +79,12 @@ void Enemy::move(const sf::Vector2f& position) {
   }
 }
 
+void Enemy::damage(int16_t amount) {
+  Entity::damage(amount);
+
+  healthBar.health.setSize(sf::Vector2f(10.F * health_, 10.F));
+}
+
 void Enemy::update(sf::Time time) {
   if(!walking_) {
     time_ -= time;
@@ -120,42 +128,43 @@ void Enemy::update(sf::Time time) {
     walking_ = false;
   }
 
-  animTime_ += time;
-  if(animTime_.asMilliseconds() > 400) {
-    animTime_ = sf::microseconds(0);
-    ++anim_;
-  }
-  const float offset = static_cast<float>(time.asMilliseconds()) / 20;
-  sf::Vector2f m;
-  if(to_underlying(direction_ & Direction::Forward)) {
-    m += sf::Vector2f(0.0F, -offset);
-    if(anim_ == 4) {
-      anim_ = 0;
+  if(direction_ != Direction::Null) {
+    animTime_ += time;
+    if(animTime_.asMilliseconds() > 400) {
+      animTime_ = sf::microseconds(0);
+      ++anim_;
     }
-    sprite_.setTextureRect(sf::IntRect(anim_ * 16, 32, 16, 16));
-  }
-  if(to_underlying(direction_ & Direction::Back)) {
-    m += sf::Vector2f(0.0F, offset);
-    if(anim_ == 4) {
-      anim_ = 0;
+
+    const float offset = static_cast<float>(time.asMilliseconds() / 5) / 4.F;
+    if(to_underlying(direction_ & Direction::Forward)) {
+      move(sf::Vector2f(0.F, -offset));
+      if(anim_ == 4) {
+        anim_ = 0;
+      }
+      sprite_.setTextureRect(sf::IntRect(anim_ * 16, 32, 16, 16));
     }
-    sprite_.setTextureRect(sf::IntRect(anim_ * 16, 0, 16, 16));
-  }
-  if(to_underlying(direction_ & Direction::Left)) {
-    m += sf::Vector2f(-offset, 0.0F);
-    if(anim_ >= 2) {
-      anim_ = 0;
+    if(to_underlying(direction_ & Direction::Back)) {
+      move(sf::Vector2f(0.F, offset));
+      if(anim_ == 4) {
+        anim_ = 0;
+      }
+      sprite_.setTextureRect(sf::IntRect(anim_ * 16, 0, 16, 16));
     }
-    sprite_.setTextureRect(sf::IntRect(anim_ * 16 + 32, 16, 16, 16));
-  }
-  if(to_underlying(direction_ & Direction::Right)) {
-    m += sf::Vector2f(offset, 0.0F);
-    if(anim_ >= 2) {
-      anim_ = 0;
+    if(to_underlying(direction_ & Direction::Left)) {
+      move(sf::Vector2f(-offset, 0.F));
+      if(anim_ >= 2) {
+        anim_ = 0;
+      }
+      sprite_.setTextureRect(sf::IntRect(anim_ * 16 + 32, 16, 16, 16));
     }
-    sprite_.setTextureRect(sf::IntRect(anim_ * 16, 16, 16, 16));
+    if(to_underlying(direction_ & Direction::Right)) {
+      move(sf::Vector2f(offset, 0.F));
+      if(anim_ >= 2) {
+        anim_ = 0;
+      }
+      sprite_.setTextureRect(sf::IntRect(anim_ * 16, 16, 16, 16));
+    }
   }
-  move(m);
 }
 
 void Enemy::draw(sf::RenderTarget& target, sf::RenderStates states) const {

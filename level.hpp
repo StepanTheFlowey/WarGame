@@ -29,7 +29,11 @@ public:
 
   void save() const;
 
+  bool collideOutside(const sf::FloatRect rect);
+
   bool collide(const sf::FloatRect rect);
+
+  Entity* collideEntity(const sf::FloatRect rect);
 
   void update(sf::Time time);
 

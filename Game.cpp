@@ -29,13 +29,20 @@ void Game::run() {
     gameView.setCenter(player->getPosition());
 
     window.clear(sf::Color::Magenta);
+
     window.setView(gameView);
     window.draw(*level);
     window.draw(*player);
     window.draw(*magazine);
+
     window.setView(uiView);
     window.draw(*gui);
+
     window.display();
+
+    if(level->collideOutside(player->getRect())) {
+      break;
+    }
 
     while(context->pollEvent()) {
       switch(event.type) {

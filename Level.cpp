@@ -93,6 +93,10 @@ void Level::save() const {
 
 }
 
+bool Level::collideOutside(const sf::FloatRect rect) {
+  return !sf::FloatRect(0.F, 0.F, sizes_.x * 64.F, sizes_.y * 64.F).intersects(rect);
+}
+
 bool Level::collide(const sf::FloatRect rect) {
   TileIndex index;
   for(TileInt i = 0; i < sizes_.y; ++i) {
@@ -109,9 +113,27 @@ bool Level::collide(const sf::FloatRect rect) {
   return false;
 }
 
+Entity* Level::collideEntity(const sf::FloatRect rect) {
+  if(player->getRect().intersects(rect)) {
+    return player;
+  }
+  for(auto i : entities_) {
+    if(i->getRect().intersects(rect)) {
+      return i;
+    }
+  }
+  return nullptr;
+}
+
 void Level::update(sf::Time time) {
-  for(auto& i : entities_) {
-    i->update(time);
+  for(size_t i = 0; i < entities_.size(); ++i) {
+    if(entities_[i]->expired()) {
+      entities_.erase(entities_.begin() + i);
+      --i;
+      continue;
+    }
+
+    entities_[i]->update(time);
   }
 }
 

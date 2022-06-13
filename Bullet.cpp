@@ -4,8 +4,6 @@
 #include <cmath>
 
 Bullet::Bullet(const sf::Vector2f& begin, const float degree, const int32_t lifetime) {
-  debug(L"Bullet()");
-
   sprite_.setTexture(*context->getTexture(ID_IMG1));
   sprite_.setTextureRect(sf::IntRect(64, 0, 16, 16));
   sprite_.setPosition(begin);
@@ -13,10 +11,6 @@ Bullet::Bullet(const sf::Vector2f& begin, const float degree, const int32_t life
   velocity_.x = sinf(degree * F_DEG_TO_RAD);
   velocity_.y = -cosf(degree * F_DEG_TO_RAD);
   lifetime_ = lifetime;
-}
-
-Bullet::~Bullet() {
-  debug(L"~Bullet()");
 }
 
 void Bullet::update(sf::Time time) {

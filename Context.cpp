@@ -93,10 +93,10 @@ bool Context::pollEvent() {
             videoMode = sf::VideoMode(800, 600);
           }
           create();
+          event.type = sf::Event::Resized;
+          event.size.width = videoMode.width;
+          event.size.height = videoMode.height;
         }
-        event.type = sf::Event::Resized;
-        event.size.width = videoMode.width;
-        event.size.height = videoMode.height;
         break;
     }
     return true;

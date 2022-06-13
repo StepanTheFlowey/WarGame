@@ -21,6 +21,8 @@ public:
 
   virtual void move(const sf::Vector2f& position);
 
+  virtual void damage(int16_t amount) override;
+
   void fire();
 
   virtual void update(sf::Time time) override;

@@ -3,6 +3,7 @@
 #include "Context.hpp"
 #include "Magazine.hpp"
 #include "Level.hpp"
+#include "Gui.hpp"
 
 Player* player = nullptr;
 
@@ -64,8 +65,14 @@ void Player::move(const sf::Vector2f& position) {
   }
 }
 
+void Player::damage(int16_t amount) {
+  Entity::damage(amount);
+
+  gui->setHealth(health_);
+}
+
 void Player::fire() {
-  float d = 0.0F;
+  float d = 0.F;
   if(to_underlying(direction_ & Direction::Back)) {
     d += 180.0F;
   }
@@ -91,7 +98,7 @@ void Player::fire() {
       d += 90.0F;
     }
   }
-  magazine->fire(getPosition(), d, 1000);
+  magazine->fire(getPosition() + sf::Vector2f(sinf(d * F_DEG_TO_RAD) * 18.F, -cosf(d * F_DEG_TO_RAD) * 26.F), d, 1000);
 }
 
 void Player::update(sf::Time time) {
@@ -104,35 +111,33 @@ void Player::update(sf::Time time) {
     animTime_ = sf::microseconds(0);
     ++anim_;
   }
-  const float offset = static_cast<float>(time.asMilliseconds()) / 5;
-  sf::Vector2f m;
+  const float offset = static_cast<float>(time.asMilliseconds() / 5);
   if(to_underlying(direction_ & Direction::Forward)) {
-    m += sf::Vector2f(0.F, -offset);
+    move(sf::Vector2f(0.F, -offset));
     if(anim_ == 4) {
       anim_ = 0;
     }
     sprite_.setTextureRect(sf::IntRect(anim_ * 16, 32, 16, 16));
   }
   if(to_underlying(direction_ & Direction::Back)) {
-    m += sf::Vector2f(0.F, offset);
+    move(sf::Vector2f(0.F, offset));
     if(anim_ == 4) {
       anim_ = 0;
     }
     sprite_.setTextureRect(sf::IntRect(anim_ * 16, 0, 16, 16));
   }
   if(to_underlying(direction_ & Direction::Left)) {
-    m += sf::Vector2f(-offset, 0.F);
+    move(sf::Vector2f(-offset, 0.F));
     if(anim_ >= 2) {
       anim_ = 0;
     }
     sprite_.setTextureRect(sf::IntRect(anim_ * 16 + 32, 16, 16, 16));
   }
   if(to_underlying(direction_ & Direction::Right)) {
-    m += sf::Vector2f(offset, 0.F);
+    move(sf::Vector2f(offset, 0.F));
     if(anim_ >= 2) {
       anim_ = 0;
     }
     sprite_.setTextureRect(sf::IntRect(anim_ * 16, 16, 16, 16));
   }
-  move(m);
 }

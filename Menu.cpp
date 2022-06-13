@@ -217,8 +217,8 @@ int Menu::select() {
         case sf::Event::MouseMoved:
         {
           sf::Vector2f mouse(
-            static_cast<float>(event.mouseButton.x),
-            static_cast<float>(event.mouseButton.y)
+            static_cast<float>(event.mouseMove.x),
+            static_cast<float>(event.mouseMove.y)
           );
 
           back.setFillColor(back.getGlobalBounds().contains(mouse) ? sf::Color::Cyan : sf::Color::White);
@@ -231,10 +231,7 @@ int Menu::select() {
 
           uint8_t i;
           for(i = 0; i < texts.size(); ++i) {
-            if(texts[i].hitbox.contains(sf::Vector2i(
-              event.mouseMove.x,
-              event.mouseMove.y
-              ))) {
+            if(texts[i].hitbox.contains(sf::Vector2i(mouse))) {
               texts[i].name.setFillColor(sf::Color::Cyan);
               texts[i].author.setFillColor(sf::Color::Cyan);
               texts[i].type.setFillColor(sf::Color::Cyan);
@@ -309,7 +306,7 @@ void Menu::Gradient::update(const sf::Time time) {
 
     if(target_ != current_) {
       current_ += (target_ - prev_) * speed_;
-      if((target_.x < prev_.x && current_.x < target_.x) ||
+      if((target_.x < prev_.x && current_.x < target_.x) || //current_.x < target_.x < prev_.x or current_.x > target_.x > prev_.x 
          (target_.x > prev_.x && current_.x > target_.x)) {
         current_.x = target_.x;
       }
