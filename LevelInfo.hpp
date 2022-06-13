@@ -3,8 +3,10 @@
 #include <vector>
 #include "main.hpp"
 
+class Level;
+
 class LevelInfo {
-  std::wstring filename_;
+  std::string filename_;
 public:
 
   std::wstring name;
@@ -21,5 +23,7 @@ public:
     debug(L"~LevelInfo()");
   }
 
-  bool load(const std::wstring filename);
+  bool load(const std::string filename);
+
+  friend Level;
 };

@@ -44,7 +44,7 @@ protected:
     sf::Vector3f current_;
     sf::Vector3f target_;
     sf::Vector3f prev_;
-    float speed_;
+    float speed_ = 0.F;
 
     sf::Vertex vt_[4];
     sf::Time time_;

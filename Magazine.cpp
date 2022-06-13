@@ -14,18 +14,18 @@ Magazine::~Magazine() {
   }
 }
 
-void Magazine::fire(const sf::Vector2f begin, const float degree, const uint32_t lenght) {
+void Magazine::fire(const sf::Vector2f& begin, const float degree, const int32_t lifetime) {
   bullets_.emplace_back();
-  bullets_.back() = new Bullet(begin, degree, lenght);
+  bullets_.back() = new Bullet(begin, degree, lifetime);
 }
 
 void Magazine::update(sf::Time time) {
-  for(size_t i = 0; i < bullets_.size();++i) {
+  for(size_t i = 0; i < bullets_.size(); ++i) {
     Bullet*& bullet = bullets_[i];
     bullet->update(time);
     if(bullet->expired()) {
       delete bullet;
-      bullets_.erase(bullets_.begin()+i);
+      bullets_.erase(bullets_.begin() + i);
       --i;
     }
   }

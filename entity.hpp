@@ -11,9 +11,15 @@ public:
 
   virtual ~Entity();
 
+  virtual const sf::Vector2f& getPosition();
+
+  virtual void setPosition(const sf::Vector2f& position);
+
   virtual const sf::FloatRect getRect();
 
-  virtual void damage(const int16_t amount);
+  virtual void move(const sf::Vector2f& position);
+
+  virtual void damage(int16_t amount);
 
   inline virtual bool expired() const {
     return expired_;
@@ -25,5 +31,5 @@ public:
 protected:
 
   sf::Sprite sprite_;
-  bool expired_;
+  bool expired_ = false;
 };

@@ -52,6 +52,18 @@ void Player::setWalk(const Direction direction, const bool walk) {
   }
 }
 
+const sf::FloatRect Player::getRect() {
+  sf::Vector2f pos = sprite_.getPosition();
+  return sf::FloatRect(pos.x - 16.F, pos.y - 24.F, 32.F, 50.F);
+}
+
+void Player::move(const sf::Vector2f& position) {
+  sprite_.move(position);
+  if(level->collide(getRect())) {
+    sprite_.move(-position);
+  }
+}
+
 void Player::fire() {
   float d = 0.0F;
   if(to_underlying(direction_ & Direction::Back)) {
@@ -95,36 +107,32 @@ void Player::update(sf::Time time) {
   const float offset = static_cast<float>(time.asMilliseconds()) / 5;
   sf::Vector2f m;
   if(to_underlying(direction_ & Direction::Forward)) {
-    m += sf::Vector2f(0.0F, -offset);
+    m += sf::Vector2f(0.F, -offset);
     if(anim_ == 4) {
       anim_ = 0;
     }
     sprite_.setTextureRect(sf::IntRect(anim_ * 16, 32, 16, 16));
   }
   if(to_underlying(direction_ & Direction::Back)) {
-    m += sf::Vector2f(0.0F, offset);
+    m += sf::Vector2f(0.F, offset);
     if(anim_ == 4) {
       anim_ = 0;
     }
     sprite_.setTextureRect(sf::IntRect(anim_ * 16, 0, 16, 16));
   }
   if(to_underlying(direction_ & Direction::Left)) {
-    m += sf::Vector2f(-offset, 0.0F);
+    m += sf::Vector2f(-offset, 0.F);
     if(anim_ >= 2) {
       anim_ = 0;
     }
     sprite_.setTextureRect(sf::IntRect(anim_ * 16 + 32, 16, 16, 16));
   }
   if(to_underlying(direction_ & Direction::Right)) {
-    m += sf::Vector2f(offset, 0.0F);
+    m += sf::Vector2f(offset, 0.F);
     if(anim_ >= 2) {
       anim_ = 0;
     }
     sprite_.setTextureRect(sf::IntRect(anim_ * 16, 16, 16, 16));
   }
-  sprite_.move(m);
-  if(level->collide(sprite_.getGlobalBounds())) {
-    sprite_.move(-m);
-    walking_ = false;
-  }
+  move(m);
 }

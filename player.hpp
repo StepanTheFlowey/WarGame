@@ -13,13 +13,13 @@ public:
 
   Player();
 
-  virtual ~Player() override;
-
-  inline const sf::Vector2f getPosition() {
-    return sprite_.getPosition();
-  }
+  virtual ~Player();
 
   void setWalk(const Direction direction, const bool walk);
+
+  virtual const sf::FloatRect getRect() override;
+
+  virtual void move(const sf::Vector2f& position);
 
   void fire();
 

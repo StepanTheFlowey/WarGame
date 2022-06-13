@@ -11,7 +11,7 @@ public:
 
   ~Magazine();
 
-  void fire(const sf::Vector2f begin, const float degree, const uint32_t lenght);
+  void fire(const sf::Vector2f& begin, const float degree, const int32_t lifetime);
 
   void update(sf::Time time);
 

@@ -12,6 +12,7 @@ class Level : public sf::Drawable {
   std::vector<Entity*> entities_;
   std::vector<Tile> tiles_;
   LevelInfo info_;
+  sf::Vector2<TileInt> sizes_;
 public:
 
   Level() {
@@ -24,7 +25,7 @@ public:
     debug(L"Level()");
   }
 
-  void load(LevelInfo& storage);
+  bool load(const LevelInfo& info);
 
   void save() const;
 

@@ -135,7 +135,7 @@ int Menu::select() {
     }
 
     levels.emplace_back();
-    if(!levels.back().load(filename)) {
+    if(!levels.back().load(shrink(filename))) {
       levels.pop_back();
     }
   }
@@ -144,7 +144,7 @@ int Menu::select() {
 
   uint32_t page = 0;
   uint32_t pageSize = context->videoMode.height / 18 - 2;
-  uint8_t lastSelected = UINT8_MAX;
+  uint16_t lastSelected = UINT16_MAX;
 
   struct LevelTexts {
     sf::Text name;
@@ -169,13 +169,13 @@ int Menu::select() {
           sf::Text(l.name, font, 16),
           sf::Text(l.author, font, 16),
           sf::Text(l.pack ? "[PACK]" : "[SNGL]", font, 16),
-          sf::IntRect(0, i * 18,context->videoMode.width, 18)
+          sf::IntRect(0, static_cast<int>(i) * 18, context->videoMode.width, 18)
         });
 
       auto& t = texts.back();
-      t.name.setPosition(sf::Vector2f(2, 2 + i * 18));
-      t.author.setPosition(sf::Vector2f(context->videoMode.width - t.author.getGlobalBounds().width - 100, 2 + i * 18));
-      t.type.setPosition(sf::Vector2f(context->videoMode.width - t.type.getGlobalBounds().width - 4, 2 + i * 18));
+      t.name.setPosition(sf::Vector2f(2.F, 2.F + i * 18.F));
+      t.author.setPosition(sf::Vector2f(context->videoMode.width - t.author.getGlobalBounds().width - 100.F, 2.F + i * 18.F));
+      t.type.setPosition(sf::Vector2f(context->videoMode.width - t.type.getGlobalBounds().width - 4.F, 2.F + i * 18.F));
       ++i;
     }
 
@@ -209,18 +209,21 @@ int Menu::select() {
 
           for(size_t i = 0; i < texts.size(); ++i) {
             auto& t = texts[i];
-            t.name.setPosition(sf::Vector2f(2, 2 + i * 18));
-            t.author.setPosition(sf::Vector2f(context->videoMode.width - t.author.getGlobalBounds().width - 100, 2 + i * 18));
-            t.type.setPosition(sf::Vector2f(context->videoMode.width - t.type.getGlobalBounds().width - 4, 2 + i * 18));
+            t.name.setPosition(sf::Vector2f(2.F, 2.F + i * 18.F));
+            t.author.setPosition(sf::Vector2f(context->videoMode.width - t.author.getGlobalBounds().width - 100.F, 2.F + i * 18.F));
+            t.type.setPosition(sf::Vector2f(context->videoMode.width - t.type.getGlobalBounds().width - 4.F, 2.F + i * 18.F));
           }
           break;
         case sf::Event::MouseMoved:
         {
-          sf::Vector2f mouse(event.mouseMove.x, event.mouseMove.y);
+          sf::Vector2f mouse(
+            static_cast<float>(event.mouseButton.x),
+            static_cast<float>(event.mouseButton.y)
+          );
 
           back.setFillColor(back.getGlobalBounds().contains(mouse) ? sf::Color::Cyan : sf::Color::White);
 
-          if(lastSelected != UINT8_MAX) {
+          if(lastSelected != UINT16_MAX) {
             texts[lastSelected].name.setFillColor(sf::Color::White);
             texts[lastSelected].author.setFillColor(sf::Color::White);
             texts[lastSelected].type.setFillColor(sf::Color::White);
@@ -238,16 +241,25 @@ int Menu::select() {
               break;
             }
           }
-          lastSelected = (i == texts.size() ? UINT8_MAX : i);
+          lastSelected = (i == texts.size() ? UINT16_MAX : i);
         }
         break;
         case sf::Event::MouseButtonPressed:
-          sf::Vector2f mouse(event.mouseButton.x, event.mouseButton.y);
+        {
+          sf::Vector2f mouse(
+            static_cast<float>(event.mouseButton.x),
+            static_cast<float>(event.mouseButton.y)
+          );
 
           if(back.getGlobalBounds().contains(mouse)) {
             return -1;
           }
-          break;
+          if(lastSelected != UINT16_MAX) {
+            level->load(levels[lastSelected]);
+            return 1;
+          }
+        }
+        break;
       }
     }
   }
@@ -297,7 +309,7 @@ void Menu::Gradient::update(const sf::Time time) {
 
     if(target_ != current_) {
       current_ += (target_ - prev_) * speed_;
-      if((target_.x < prev_.x && current_.x < target_.x)||
+      if((target_.x < prev_.x && current_.x < target_.x) ||
          (target_.x > prev_.x && current_.x > target_.x)) {
         current_.x = target_.x;
       }

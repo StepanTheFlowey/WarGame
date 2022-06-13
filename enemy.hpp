@@ -21,9 +21,13 @@ public:
 
   Enemy(const sf::Vector2f position);
 
-  virtual ~Enemy() override;
+  virtual ~Enemy();
 
   void fire();
+
+  virtual const sf::FloatRect getRect() override;
+
+  virtual void move(const sf::Vector2f& position) override;
 
   virtual void update(sf::Time time) override;
 

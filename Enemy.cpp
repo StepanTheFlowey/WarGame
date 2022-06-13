@@ -6,22 +6,23 @@
 
 Enemy::Enemy(const sf::Vector2f position) {
   debug(L"Enemy()");
+
   sprite_.setTexture(*context->getTexture(ID_IMG1));
   sprite_.setTextureRect(sf::IntRect(0, 0, 16, 16));
   sprite_.setScale(sf::Vector2f(4.0F, 4.0F));
   sprite_.setOrigin(sf::Vector2f(8.0F, 8.0F));
   sprite_.setPosition(position);
   sprite_.setColor(sf::Color::Red);
-  
+
   healthBar.rect.setFillColor(sf::Color::Black);
-  healthBar.rect.setSize(sf::Vector2f(54, 14));
-  healthBar.rect.setOrigin(sf::Vector2f(27, 7));
-  healthBar.rect.setPosition(position - sf::Vector2f(0, 40));
+  healthBar.rect.setSize(sf::Vector2f(54.F, 14.F));
+  healthBar.rect.setOrigin(sf::Vector2f(27.F, 7.F));
+  healthBar.rect.setPosition(position - sf::Vector2f(0.F, 40.F));
 
   healthBar.health.setFillColor(sf::Color::Red);
-  healthBar.health.setSize(sf::Vector2f(50, 10));
-  healthBar.health.setOrigin(sf::Vector2f(25, 5));
-  healthBar.health.setPosition(position - sf::Vector2f(0, 40));
+  healthBar.health.setSize(sf::Vector2f(50.F, 10.F));
+  healthBar.health.setOrigin(sf::Vector2f(25.F, 5.F));
+  healthBar.health.setPosition(position - sf::Vector2f(0.F, 40.F));
 }
 
 Enemy::~Enemy() {
@@ -29,41 +30,58 @@ Enemy::~Enemy() {
 }
 
 void Enemy::fire() {
-  float d = 0.0F;
+  float d = 0.F;
   if(to_underlying(direction_ & Direction::Back)) {
-    d += 180.0F;
+    d += 180.F;
   }
   if(to_underlying(direction_ & Direction::Left)) {
     if(to_underlying(direction_ & Direction::Back)) {
-      d += 45.0F;
+      d += 45.F;
     }
     else if(to_underlying(direction_ & Direction::Forward)) {
-      d -= 45.0F;
+      d -= 45.F;
     }
     else {
-      d -= 90.0F;
+      d -= 90.F;
     }
   }
   if(to_underlying(direction_ & Direction::Right)) {
     if(to_underlying(direction_ & Direction::Back)) {
-      d -= 45.0F;
+      d -= 45.F;
     }
     else if(to_underlying(direction_ & Direction::Forward)) {
-      d += 45.0F;
+      d += 45.F;
     }
     else {
-      d += 90.0F;
+      d += 90.F;
     }
   }
   magazine->fire(sprite_.getPosition(), d, 1000);
 }
 
+const sf::FloatRect Enemy::getRect() {
+  sf::Vector2f pos = sprite_.getPosition();
+  return sf::FloatRect(pos.x - 16.F, pos.y - 24.F, 32.F, 50.F);
+}
+
+void Enemy::move(const sf::Vector2f& position) {
+  sprite_.move(position);
+  if(level->collide(sprite_.getGlobalBounds())) {
+    sprite_.move(-position);
+    walking_ = false;
+  }
+  else {
+    const sf::Vector2f pos = sprite_.getPosition() - sf::Vector2f(0.F, 40.F);
+    healthBar.health.setPosition(pos);
+    healthBar.rect.setPosition(pos);
+  }
+}
 
 void Enemy::update(sf::Time time) {
   if(!walking_) {
     time_ -= time;
     if(time_.asMicroseconds() < 0) {
-      time_ = sf::milliseconds(rand() % 2000 + 1000);
+      time_ = sf::milliseconds(rand() % 4000 + 1500);
       walking_ = false;
     }
     else {
@@ -98,7 +116,7 @@ void Enemy::update(sf::Time time) {
 
   time_ -= time;
   if(time_.asMicroseconds() < 0) {
-    time_ = sf::milliseconds(rand() % 2000 + 1000);
+    time_ = sf::milliseconds(rand() % 1000 + 500);
     walking_ = false;
   }
 
@@ -137,16 +155,7 @@ void Enemy::update(sf::Time time) {
     }
     sprite_.setTextureRect(sf::IntRect(anim_ * 16, 16, 16, 16));
   }
-  sprite_.move(m);
-  if(level->collide(sprite_.getGlobalBounds())) {
-    sprite_.move(-m);
-    walking_ = false;
-  }
-  else {
-    const sf::Vector2f pos = sprite_.getPosition()- sf::Vector2f(0, 40);
-    healthBar.health.setPosition(pos);
-    healthBar.rect.setPosition(pos);
-  }
+  move(m);
 }
 
 void Enemy::draw(sf::RenderTarget& target, sf::RenderStates states) const {

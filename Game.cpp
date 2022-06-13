@@ -15,7 +15,10 @@ void Game::run() {
 
   context->create();
   uiView = window.getDefaultView();
-  gameView.setSize(sf::Vector2f(context->videoMode.width, context->videoMode.height));
+  gameView.setSize(sf::Vector2f(
+    static_cast<float>(context->videoMode.width),
+    static_cast<float>(context->videoMode.height)
+  ));
   while(context->alive()) {
     context->autoClock();
 
@@ -38,11 +41,13 @@ void Game::run() {
       switch(event.type) {
         case sf::Event::Resized:
         {
-          sf::Vector2f size(event.size.width, event.size.height);
+          sf::Vector2f size(
+            static_cast<float>(event.size.width),
+            static_cast<float>(event.size.height)
+          );
           gameView.setSize(size);
           uiView.setSize(size);
-          size.x /= 2.F;
-          size.y /= 2.F;
+          size /= 2.F;
           uiView.setCenter(size);
         }
         break;
@@ -65,7 +70,10 @@ void Game::run() {
               player->setWalk(Direction::Right, true);
               break;
             case sf::Keyboard::F11:
-              gameView.setSize(sf::Vector2f(context->videoMode.width, context->videoMode.height));
+              gameView.setSize(sf::Vector2f(
+                static_cast<float>(context->videoMode.width),
+                static_cast<float>(context->videoMode.height)
+              ));
               break;
             case sf::Keyboard::E:
               player->fire();

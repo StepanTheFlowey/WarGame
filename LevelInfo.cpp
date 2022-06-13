@@ -15,8 +15,8 @@ std::wstring readString(std::ifstream& file) {
   return wide(str);
 }
 
-bool LevelInfo::load(const std::wstring filename) {
-  std::ifstream file(shrink(filename), std::ios::binary);
+bool LevelInfo::load(const std::string filename) {
+  std::ifstream file(filename, std::ios::binary);
   
   if(!file) {
     return false;

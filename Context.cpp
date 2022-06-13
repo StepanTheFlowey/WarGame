@@ -9,9 +9,9 @@ namespace fs = std::filesystem;
 
 Context* context = nullptr;
 
-Context::Context() : window(), event() {
+Context::Context() : event() {
   debug(L"Context()");
-  contextSettings_.antialiasingLevel = 0;
+  contextSettings_.antialiasingLevel = 4;
   contextSettings_.depthBits = 0;
   contextSettings_.majorVersion = 2;
   contextSettings_.minorVersion = 1;
@@ -94,6 +94,9 @@ bool Context::pollEvent() {
           }
           create();
         }
+        event.type = sf::Event::Resized;
+        event.size.width = videoMode.width;
+        event.size.height = videoMode.height;
         break;
     }
     return true;
