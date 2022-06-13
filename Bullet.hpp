@@ -22,7 +22,7 @@ public:
     return expired_;
   }
 
-  void update(sf::Time time);
+  void update(const sf::Time& time);
 
   virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };

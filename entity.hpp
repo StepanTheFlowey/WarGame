@@ -6,25 +6,35 @@
 class Entity : public sf::Drawable {
 public:
 
-  Entity();
+  inline Entity() {
+    debug(L"Entity()");
+  }
 
-  virtual ~Entity();
+  inline virtual ~Entity() {
+    debug(L"~Entity()");
+  }
 
-  virtual const sf::Vector2f& getPosition();
+  inline virtual const sf::Vector2f& getPosition() {
+    return sprite_.getPosition();
+  }
 
-  virtual void setPosition(const sf::Vector2f& position);
+  inline virtual void setPosition(const sf::Vector2f& position) {
+    sprite_.setPosition(position);
+  }
 
-  virtual const sf::FloatRect getRect();
+  inline virtual const sf::FloatRect getRect() {
+    return sprite_.getGlobalBounds();
+  }
 
   virtual void move(const sf::Vector2f& position);
 
-  virtual void damage(int16_t amount);
+  virtual void damage(const int16_t amount);
 
   inline virtual bool expired() const {
     return expired_;
   }
 
-  virtual void update(sf::Time time);
+  virtual void update(const sf::Time& time);
 
   virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 protected:

@@ -13,7 +13,9 @@ public:
 
   Player();
 
-  virtual ~Player();
+  virtual ~Player() = default;
+
+  void fire();
 
   void setWalk(const Direction direction, const bool walk);
 
@@ -21,10 +23,8 @@ public:
 
   virtual void move(const sf::Vector2f& position);
 
-  virtual void damage(int16_t amount) override;
+  virtual void damage(const int16_t amount) override;
 
-  void fire();
-
-  virtual void update(sf::Time time) override;
+  virtual void update(const sf::Time& time) override;
 };
 extern Player* player;

@@ -1,22 +1,26 @@
 #include "main.hpp"
 
-#include "Level.hpp"
+#include "Randomizer.hpp"
 #include "Context.hpp"
-#include "Player.hpp"
+#include "Level.hpp"
 #include "Gui.hpp"
+#include "Player.hpp"
+#include "Magazine.hpp"
 #include "Menu.hpp"
 #include "Game.hpp"
 
 int submain() {
+  random = new Randomizer;
   context = new Context;
   level = new Level;
-  gui = new Dialogue;
-  magazine = new Magazine;
+  gui = new Gui;
   player = new Player;
+  magazine = new Magazine;
 
   context->create();
 
   Menu menu;
+
 back:
   switch(menu.run()) {
     case 0:
@@ -27,6 +31,13 @@ back:
       goto back;
     }
   }
+
+  delete magazine;
+  delete player;
+  delete gui;
+  delete level;
+  delete context;
+  delete random;
 
   return EXIT_SUCCESS;
 }
@@ -48,6 +59,6 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 #else
     MessageBoxW(NULL, exeption.wtf().c_str(), L"Shit happened!", MB_ICONERROR | MB_OK);
 #endif // DEBUG
-  }
+}
   return EXIT_FAILURE;
 }

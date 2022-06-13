@@ -7,6 +7,11 @@
 
 Level* level = nullptr;
 
+Level::Level() {
+  vbo_.setPrimitiveType(sf::Quads);
+  vbo_.setUsage(sf::VertexBuffer::Static);
+}
+
 void rewindString(std::ifstream& file) {
   while(file.get() != 0) {
 
@@ -26,16 +31,11 @@ bool Level::load(const LevelInfo& info) {
   rewindString(file);
   rewindString(file);
 
-  TileInt w = 0;
-  if(file.read(reinterpret_cast<char*>(&w), sizeof(w)).gcount() != sizeof(w)) {
+  if(file.read(reinterpret_cast<char*>(&sizes_), sizeof(sizes_)).gcount() != sizeof(sizes_)) {
     return false;
   }
-  TileInt h = 0;
-  if(file.read(reinterpret_cast<char*>(&h), sizeof(h)).gcount() != sizeof(h)) {
-    return false;
-  }
-  sizes_.x = ntohs(w);
-  sizes_.y = ntohs(h);
+  sizes_.x = ntohs(sizes_.x);
+  sizes_.y = ntohs(sizes_.y);
 
   const TileIndex size = sizes_.x * sizes_.y;
   tiles_.resize(size);
@@ -43,9 +43,6 @@ bool Level::load(const LevelInfo& info) {
   if(file.read(reinterpret_cast<char*>(tiles_.data()), size * sizeof(Tile)).gcount() != size * sizeof(Tile)) {
     return false;
   }
-
-  constexpr float tileSize = 64.F;
-  constexpr float texSize = 16.F;
 
   sf::Vertex* const vt = new sf::Vertex[size * 4];
 
@@ -58,25 +55,25 @@ bool Level::load(const LevelInfo& info) {
 
       pos.x = static_cast<float>(j);
       pos.y = static_cast<float>(i);
-      pos *= tileSize;
+      pos *= S_TILE;
 
       vt[index + 0].position = pos + sf::Vector2f(0.F, 0.F);
-      vt[index + 1].position = pos + sf::Vector2f(0.F, tileSize);
-      vt[index + 2].position = pos + sf::Vector2f(tileSize, tileSize);
-      vt[index + 3].position = pos + sf::Vector2f(tileSize, 0.F);
+      vt[index + 1].position = pos + sf::Vector2f(0.F, S_TILE);
+      vt[index + 2].position = pos + sf::Vector2f(S_TILE, S_TILE);
+      vt[index + 3].position = pos + sf::Vector2f(S_TILE, 0.F);
 
       tex = getTileTexturePos(tiles_[index / 4].type) + sf::Vector2f(0.F, 48.F);
       vt[index + 0].texCoords = tex + sf::Vector2f(0.F, 0.F);
-      vt[index + 1].texCoords = tex + sf::Vector2f(0.F, texSize);
-      vt[index + 2].texCoords = tex + sf::Vector2f(texSize, texSize);
-      vt[index + 3].texCoords = tex + sf::Vector2f(texSize, 0.F);
+      vt[index + 1].texCoords = tex + sf::Vector2f(0.F, S_TEXTURE);
+      vt[index + 2].texCoords = tex + sf::Vector2f(S_TEXTURE, S_TEXTURE);
+      vt[index + 3].texCoords = tex + sf::Vector2f(S_TEXTURE, 0.F);
 
       switch(tiles_[index / 4].type) {
         case Tile::Type::Player:
-          player->setPosition(pos + sf::Vector2f(tileSize / 2, tileSize / 2));
+          player->setPosition(pos + sf::Vector2f(S_TILE / 2.F, S_TILE / 2.F));
           break;
         case Tile::Type::Enemy:
-          entities_.push_back(new Enemy(pos + sf::Vector2f(tileSize / 2, tileSize / 2)));
+          entities_.push_back(new Enemy(pos + sf::Vector2f(S_TILE / 2.F, S_TILE / 2.F)));
           break;
       }
     }
@@ -93,11 +90,7 @@ void Level::save() const {
 
 }
 
-bool Level::collideOutside(const sf::FloatRect rect) {
-  return !sf::FloatRect(0.F, 0.F, sizes_.x * 64.F, sizes_.y * 64.F).intersects(rect);
-}
-
-bool Level::collide(const sf::FloatRect rect) {
+bool Level::collide(const sf::FloatRect& rect) {
   TileIndex index;
   for(TileInt i = 0; i < sizes_.y; ++i) {
     for(TileInt j = 0; j < sizes_.x; ++j) {
@@ -113,19 +106,25 @@ bool Level::collide(const sf::FloatRect rect) {
   return false;
 }
 
-Entity* Level::collideEntity(const sf::FloatRect rect) {
+Entity* Level::collideEntity(const sf::FloatRect& rect) {
   if(player->getRect().intersects(rect)) {
     return player;
   }
+
   for(auto i : entities_) {
     if(i->getRect().intersects(rect)) {
       return i;
     }
   }
+
   return nullptr;
 }
 
-void Level::update(sf::Time time) {
+bool Level::collideOutside(const sf::FloatRect& rect) {
+  return !sf::FloatRect(0.F, 0.F, sizes_.x * 64.F, sizes_.y * 64.F).intersects(rect);
+}
+
+void Level::update(const sf::Time& time) {
   for(size_t i = 0; i < entities_.size(); ++i) {
     if(entities_[i]->expired()) {
       entities_.erase(entities_.begin() + i);

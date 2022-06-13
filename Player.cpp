@@ -8,16 +8,10 @@
 Player* player = nullptr;
 
 Player::Player() {
-  debug(L"Player()");
-
   sprite_.setTexture(*context->getTexture(ID_IMG1));
   sprite_.setTextureRect(sf::IntRect(0, 0, 16, 16));
-  sprite_.setScale(sf::Vector2f(4.0F, 4.0F));
-  sprite_.setOrigin(sf::Vector2f(8.0F, 8.0F));
-}
-
-Player::~Player() {
-  debug(L"~Player()");
+  sprite_.setScale(sf::Vector2f(4.F, 4.F));
+  sprite_.setOrigin(sf::Vector2f(8.F, 8.F));
 }
 
 void Player::setWalk(const Direction direction, const bool walk) {
@@ -53,24 +47,6 @@ void Player::setWalk(const Direction direction, const bool walk) {
   }
 }
 
-const sf::FloatRect Player::getRect() {
-  sf::Vector2f pos = sprite_.getPosition();
-  return sf::FloatRect(pos.x - 16.F, pos.y - 24.F, 32.F, 50.F);
-}
-
-void Player::move(const sf::Vector2f& position) {
-  sprite_.move(position);
-  if(level->collide(getRect())) {
-    sprite_.move(-position);
-  }
-}
-
-void Player::damage(int16_t amount) {
-  Entity::damage(amount);
-
-  gui->setHealth(health_);
-}
-
 void Player::fire() {
   float d = 0.F;
   if(to_underlying(direction_ & Direction::Back)) {
@@ -101,7 +77,25 @@ void Player::fire() {
   magazine->fire(getPosition() + sf::Vector2f(sinf(d * F_DEG_TO_RAD) * 18.F, -cosf(d * F_DEG_TO_RAD) * 26.F), d, 1000);
 }
 
-void Player::update(sf::Time time) {
+const sf::FloatRect Player::getRect() {
+  sf::Vector2f pos = sprite_.getPosition();
+  return sf::FloatRect(pos.x - 16.F, pos.y - 24.F, 32.F, 50.F);
+}
+
+void Player::move(const sf::Vector2f& position) {
+  sprite_.move(position);
+  if(level->collide(getRect())) {
+    sprite_.move(-position);
+  }
+}
+
+void Player::damage(const int16_t amount) {
+  Entity::damage(amount);
+
+  gui->setHealth(health_);
+}
+
+void Player::update(const sf::Time& time) {
   if(!walking_) {
     return;
   }

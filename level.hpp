@@ -15,27 +15,21 @@ class Level : public sf::Drawable {
   sf::Vector2<TileInt> sizes_;
 public:
 
-  Level() {
-    debug(L"Level()");
-    vbo_.setPrimitiveType(sf::Quads);
-    vbo_.setUsage(sf::VertexBuffer::Static);
-  }
+  Level();
 
-  ~Level() {
-    debug(L"Level()");
-  }
+  ~Level() = default;
 
   bool load(const LevelInfo& info);
 
   void save() const;
 
-  bool collideOutside(const sf::FloatRect rect);
+  bool collide(const sf::FloatRect& rect);
 
-  bool collide(const sf::FloatRect rect);
+  Entity* collideEntity(const sf::FloatRect& rect);
 
-  Entity* collideEntity(const sf::FloatRect rect);
+  bool collideOutside(const sf::FloatRect& rect);
 
-  void update(sf::Time time);
+  void update(const sf::Time& time);
 
   virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };

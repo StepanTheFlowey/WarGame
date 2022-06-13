@@ -1,9 +1,10 @@
 #include "Gui.hpp"
 
-Dialogue* gui = nullptr;
+#include <SFML/Graphics/RenderTarget.hpp>
 
-Dialogue::Dialogue() {
-  debug(L"Dialogue()");
+Gui* gui = nullptr;
+
+Gui::Gui() {
   healthBar.rect.setPosition(sf::Vector2f(10, 10));
   healthBar.rect.setSize(sf::Vector2f(104, 24));
   healthBar.rect.setFillColor(sf::Color::Black);
@@ -12,11 +13,7 @@ Dialogue::Dialogue() {
   healthBar.health.setFillColor(sf::Color::Red);
 }
 
-Dialogue::~Dialogue() {
-  debug(L"~Dialogue()");
-}
-
-void Dialogue::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+void Gui::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   target.draw(healthBar.rect, states);
   target.draw(healthBar.health, states);
 }

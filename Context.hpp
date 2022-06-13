@@ -28,13 +28,11 @@ public:
 
   ~Context();
 
-  void load();
-
-  void save() const;
-
   void create();
 
-  void destroy();
+  inline void destroy() {
+    window.close();
+  }
 
   inline bool alive() const {
     return window.isOpen();

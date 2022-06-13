@@ -54,6 +54,9 @@
     <ClCompile Include="Menu.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
+    <ClCompile Include="Randomizer.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.hpp">
@@ -102,6 +105,9 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="Menu.hpp">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Randomizer.hpp">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>

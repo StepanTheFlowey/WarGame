@@ -9,27 +9,18 @@ namespace fs = std::filesystem;
 
 Context* context = nullptr;
 
-Context::Context() : event() {
+Context::Context() :
+  event(),
+  videoMode(800, 600) {
   debug(L"Context()");
-  contextSettings_.antialiasingLevel = 4;
-  contextSettings_.depthBits = 0;
-  contextSettings_.majorVersion = 2;
-  contextSettings_.minorVersion = 1;
 
-  videoMode = sf::VideoMode(800, 600);
+  contextSettings_.antialiasingLevel = 4;
 }
 
 Context::~Context() {
   debug(L"~Context()");
+
   destroy();
-}
-
-void Context::load() {
-
-}
-
-void Context::save() const {
-
 }
 
 void Context::create() {
@@ -40,11 +31,6 @@ void Context::create() {
     window.create(videoMode, L"WarGame", sf::Style::Default, contextSettings_);
   }
   window.setVerticalSyncEnabled(true);
-}
-
-void Context::destroy() {
-  window.close();
-  exit(EXIT_SUCCESS);
 }
 
 void Context::autoEvent() {
@@ -93,6 +79,7 @@ bool Context::pollEvent() {
             videoMode = sf::VideoMode(800, 600);
           }
           create();
+
           event.type = sf::Event::Resized;
           event.size.width = videoMode.width;
           event.size.height = videoMode.height;

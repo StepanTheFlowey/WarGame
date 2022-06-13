@@ -1,5 +1,6 @@
 #include "Enemy.hpp"
 
+#include "Randomizer.hpp"
 #include "Context.hpp"
 #include "Magazine.hpp"
 #include "Level.hpp"
@@ -11,8 +12,8 @@ Enemy::Enemy(const sf::Vector2f position) {
 
   sprite_.setTexture(*context->getTexture(ID_IMG1));
   sprite_.setTextureRect(sf::IntRect(0, 0, 16, 16));
-  sprite_.setScale(sf::Vector2f(4.0F, 4.0F));
-  sprite_.setOrigin(sf::Vector2f(8.0F, 8.0F));
+  sprite_.setScale(sf::Vector2f(4.F, 4.F));
+  sprite_.setOrigin(sf::Vector2f(8.F, 8.F));
   sprite_.setPosition(position);
   sprite_.setColor(sf::Color::Red);
 
@@ -79,26 +80,26 @@ void Enemy::move(const sf::Vector2f& position) {
   }
 }
 
-void Enemy::damage(int16_t amount) {
+void Enemy::damage(const int16_t amount) {
   Entity::damage(amount);
 
   healthBar.health.setSize(sf::Vector2f(10.F * health_, 10.F));
 }
 
-void Enemy::update(sf::Time time) {
+void Enemy::update(const sf::Time& time) {
   if(!walking_) {
     time_ -= time;
     if(time_.asMicroseconds() < 0) {
-      time_ = sf::milliseconds(rand() % 4000 + 1500);
+      time_ = sf::milliseconds(random->get() % 4000 + 1500);
       walking_ = false;
     }
     else {
       return;
     }
 
-    switch(rand() % 2) {
+    switch(random->get() % 2) {
       case 0:
-        direction_ = static_cast<Direction>(1 << (rand() % 4));
+        direction_ = static_cast<Direction>(1 << (random->get() % 4));
         break;
       case 1:
         walking_ = true;
@@ -124,7 +125,7 @@ void Enemy::update(sf::Time time) {
 
   time_ -= time;
   if(time_.asMicroseconds() < 0) {
-    time_ = sf::milliseconds(rand() % 1000 + 500);
+    time_ = sf::milliseconds(random->get() % 1000 + 500);
     walking_ = false;
   }
 

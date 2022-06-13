@@ -44,7 +44,6 @@ bool LevelInfo::load(const std::string filename) {
       return false;
     }
     size = ntohs(size);
-    file.close();
   }
   else {
     return false;

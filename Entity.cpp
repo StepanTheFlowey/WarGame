@@ -2,26 +2,6 @@
 
 #include "Level.hpp"
 
-Entity::Entity() {
-  debug(L"Entity()");
-}
-
-Entity::~Entity() {
-  debug(L"~Entity()");
-}
-
-const sf::Vector2f& Entity::getPosition() {
-  return sprite_.getPosition();
-}
-
-void Entity::setPosition(const sf::Vector2f& position) {
-  sprite_.setPosition(position);
-}
-
-const sf::FloatRect Entity::getRect() {
-  return sprite_.getGlobalBounds();
-}
-
 void Entity::move(const sf::Vector2f& position) {
   sprite_.move(position);
   if(level->collide(sprite_.getGlobalBounds())) {
@@ -29,7 +9,7 @@ void Entity::move(const sf::Vector2f& position) {
   }
 }
 
-void Entity::damage(int16_t amount) {
+void Entity::damage(const int16_t amount) {
   health_ -= amount;
   if(health_ <= 0) {
     health_ = 0;
@@ -37,7 +17,7 @@ void Entity::damage(int16_t amount) {
   }
 }
 
-void Entity::update(sf::Time time) {
+void Entity::update(const sf::Time& time) {
   throw std::runtime_error("attempting to update pure entity");
 }
 
